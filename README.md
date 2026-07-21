@@ -1,4 +1,4 @@
-# Cryptovexxing.com
+Cryptovexxing.com
 
 **The Ultimate Onchain AI Crypto Terminal**
 
