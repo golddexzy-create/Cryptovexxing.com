@@ -1,204 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cryptovexxing.com • MAX TERMINAL</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-        :root { --green: #00ff9d; --red: #ff3b5c; --blue: #00d0ff; }
-        * { margin:0; padding:0; box-sizing:border-box; }
-        body { background:#050505; color:var(--green); font-family:'VT323',monospace; height:100vh; overflow:hidden; }
-        .header { background:#0a0a0a; padding:12px 16px; border-bottom:4px solid var(--blue); display:flex; justify-content:space-between; align-items:center; font-size:1.55rem; }
-        .logo { color:var(--blue); text-shadow:0 0 12px var(--blue); }
-        .tabs { display:flex; background:#111; }
-        .tab { padding:12px 20px; cursor:pointer; border-bottom:4px solid transparent; }
-        .tab.active { border-bottom-color:var(--green); background:#1a1a1a; }
-        .content { height:calc(100vh - 140px); overflow-y:auto; padding:8px; }
-        .panel { background:rgba(15,15,15,0.95); border:2px solid #333; padding:14px; margin-bottom:12px; }
-        .ticker { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:10px; }
-        .coin { background:#1a1a1a; padding:12px; text-align:center; border:1px solid #444; cursor:pointer; }
-        .coin:hover { border-color:var(--green); }
-        .price { font-size:1.75rem; font-weight:bold; }
-        .ai-chat { height:340px; background:#000; padding:12px; overflow-y:auto; border:2px solid var(--blue); margin-bottom:8px; }
-        .input-bar { position:fixed; bottom:0; left:0; right:0; background:#111; padding:12px; border-top:4px solid var(--green); display:flex; gap:8px; z-index:999; }
-        input { flex:1; background:#000; border:2px solid var(--green); color:var(--green); padding:14px; font-size:1.25rem; font-family:'VT323',monospace; }
-        button { background:#000; color:var(--green); border:3px solid var(--green); padding:0 22px; font-size:1.3rem; cursor:pointer; font-family:'VT323',monospace; }
-        button:hover { background:var(--green); color:#000; }
-        table { border-collapse:collapse; width:100%; }
-        th, td { padding:8px; text-align:left; border-bottom:1px solid #333; }
-        th { color:var(--blue); }
-        .status { font-size:0.9rem; color:#888; margin-top:8px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cryptovexxing · Live desk</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+    :root { --green:#00ff9d; --red:#ff3b5c; --blue:#00d0ff; --ink:#050505; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:var(--ink); color:var(--green); font-family:'VT323',monospace; min-height:100vh; }
+    .header { background:#0a0a0a; padding:12px 16px; border-bottom:4px solid var(--blue); display:flex; justify-content:space-between; gap:12px; align-items:center; font-size:1.45rem; }
+    .logo { color:var(--blue); text-shadow:0 0 12px var(--blue); }
+    .live { color:var(--green); font-size:1.1rem; }
+    .tabs { display:flex; background:#111; overflow:auto; }
+    .tab { padding:12px 18px; cursor:pointer; border-bottom:4px solid transparent; white-space:nowrap; }
+    .tab.active { border-bottom-color:var(--green); background:#1a1a1a; }
+    .content { padding:8px 8px 88px; }
+    .panel { background:rgba(15,15,15,.95); border:2px solid #333; padding:14px; margin-bottom:12px; }
+    h2 { font-size:1.35rem; margin-bottom:8px; color:var(--blue); font-weight:400; }
+    .ticker { display:grid; grid-template-columns:repeat(auto-fit,minmax(132px,1fr)); gap:10px; }
+    .coin { background:#1a1a1a; padding:12px; text-align:center; border:1px solid #444; cursor:pointer; }
+    .coin.on { border-color:var(--green); }
+    .price { font-size:1.7rem; }
+    .ai-chat { height:280px; background:#000; padding:12px; overflow-y:auto; border:2px solid var(--blue); margin-bottom:8px; line-height:1.35; }
+    .input-bar { position:fixed; bottom:0; left:0; right:0; background:#111; padding:12px; border-top:4px solid var(--green); display:flex; gap:8px; }
+    input, button { font-family:'VT323',monospace; font-size:1.25rem; }
+    input { flex:1; background:#000; border:2px solid var(--green); color:var(--green); padding:12px; width:100%; }
+    button { background:#000; color:var(--green); border:3px solid var(--green); padding:0 18px; cursor:pointer; }
+    button:hover { background:var(--green); color:#000; }
+    table { border-collapse:collapse; width:100%; }
+    th, td { padding:8px; text-align:left; border-bottom:1px solid #333; }
+    th { color:var(--blue); font-weight:400; }
+    .status { color:#888; margin-top:8px; }
+    canvas { width:100%; height:280px; background:#000; border:2px solid #333; display:block; }
+    .full { width:100%; padding:16px; }
+  </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo">🤖 CRYPTOVEXXING.COM</div>
-        <div>ONCHAIN AI TERMINAL</div>
+  <div class="header">
+    <div class="logo">CRYPTOVEXXING</div>
+    <div class="live" id="clock">LIVE DESK</div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" data-tab="0">TERMINAL</div>
+    <div class="tab" data-tab="1">ADVISOR</div>
+    <div class="tab" data-tab="2">CHART</div>
+    <div class="tab" data-tab="3">WALLET</div>
+  </div>
+  <div id="tab0" class="content">
+    <div class="panel">
+      <h2>LIVE FEED</h2>
+      <div class="ticker" id="tickers"></div>
+      <div class="status" id="feed-status">Calling CoinGecko…</div>
     </div>
-    
-    <div class="tabs">
-        <div class="tab active" onclick="switchTab(0)">TERMINAL</div>
-        <div class="tab" onclick="switchTab(1)">AI ADVISOR</div>
-        <div class="tab" onclick="switchTab(2)">CHARTS</div>
-        <div class="tab" onclick="switchTab(3)">WALLET</div>
+  </div>
+  <div id="tab1" class="content" style="display:none">
+    <div class="panel">
+      <h2>DESK ADVISOR</h2>
+      <div id="ai-log" class="ai-chat"></div>
+      <input id="ai-input" placeholder="Ask about BTC, SOL, ETH…">
     </div>
-    
-    <div id="tab0" class="content">
-        <div class="panel">
-            <h2>LIVE FEED</h2>
-            <div class="ticker" id="tickers"></div>
-            <div class="status" id="feed-status">Loading prices from CoinGecko...</div>
-        </div>
-        <div class="panel">
-            <h2>POSITIONS</h2>
-            <table id="positions" style="width:100%"></table>
-        </div>
+  </div>
+  <div id="tab2" class="content" style="display:none">
+    <div class="panel">
+      <h2 id="chart-title">7-DAY CHART</h2>
+      <canvas id="chart" width="900" height="320"></canvas>
+      <div class="status" id="chart-status">Pick a coin.</div>
     </div>
-    
-    <div id="tab1" class="content" style="display:none">
-        <div class="panel">
-            <h2>CRYPTO / STOCKS AI ADVISOR</h2>
-            <div id="ai-log" class="ai-chat"></div>
-            <input id="ai-input" placeholder="Ask about BTC, SOL, stocks..." style="width:100%;">
-        </div>
+  </div>
+  <div id="tab3" class="content" style="display:none">
+    <div class="panel">
+      <h2>WALLET</h2>
+      <button class="full" id="connect" type="button">CONNECT WALLET</button>
+      <div id="wallet-info" class="status">No wallet connected. This desk does not hold keys until you connect.</div>
+      <table id="balances"></table>
     </div>
-    
-    <div id="tab2" class="content" style="display:none">
-        <div class="panel">
-            <h2>ADVANCED CHARTS</h2>
-            <div style="height:420px;background:#111;display:flex;align-items:center;justify-content:center;border:2px dashed #00ff9d;color:#555;font-size:1.2rem;">
-                📊 TradingView charts coming soon
-            </div>
-        </div>
-    </div>
-    
-    <div id="tab3" class="content" style="display:none">
-        <div class="panel">
-            <h2>ONCHAIN WALLET</h2>
-            <button onclick="connectWallet()" style="width:100%;padding:18px;font-size:1.4rem;">CONNECT WALLET</button>
-            <div id="wallet-info" style="margin-top:16px;"></div>
-        </div>
-    </div>
-    
-    <div class="input-bar">
-        <input type="text" id="cmd" placeholder="buy SOL 50 | ai analyze BTC">
-        <button onclick="executeCommand()">EXEC</button>
-    </div>
-    
-    <script>
-        let walletConnected = false;
-        let priceData = {};
-        const coins = ["bitcoin", "solana", "ethereum", "ripple", "dogecoin"];
-        const coinSymbols = {
-            "bitcoin": "BTC",
-            "solana": "SOL",
-            "ethereum": "ETH",
-            "ripple": "XRP",
-            "dogecoin": "DOGE"
-        };
-        
-        async function fetchPrices() {
-            try {
-                const ids = coins.join(',');
-                const response = await fetch(
-                    `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`
-                );
-                if (!response.ok) throw new Error('API Error');
-                const data = await response.json();
-                priceData = data;
-                updateTickers();
-                document.getElementById("feed-status").textContent = "✅ Live feed connected";
-                // Refresh every 30 seconds
-                setTimeout(fetchPrices, 30000);
-            } catch (error) {
-                document.getElementById("feed-status").textContent = "❌ API Error: " + error.message;
-                setTimeout(fetchPrices, 5000);
-            }
+  </div>
+  <div class="input-bar">
+    <input id="cmd" placeholder="price BTC · chart SOL · analyze ETH">
+    <button id="exec" type="button">EXEC</button>
+  </div>
+  <script>
+    const coins = [
+      { id: "bitcoin", sym: "BTC" },
+      { id: "solana", sym: "SOL" },
+      { id: "ethereum", sym: "ETH" },
+      { id: "ripple", sym: "XRP" },
+      { id: "dogecoin", sym: "DOGE" }
+    ];
+    const bySym = Object.fromEntries(coins.map(c => [c.sym, c]));
+    let priceData = {};
+    let selected = "bitcoin";
+    let wallet = null;
+
+    function money(n) {
+      if (typeof n !== "number") return "?";
+      return n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: n < 1 ? 4 : 2 });
+    }
+    function findCoin(text) {
+      const q = text.toUpperCase();
+      return coins.find(c => q.includes(c.sym) || q.includes(c.id.toUpperCase())) || null;
+    }
+    function log(msg) {
+      const el = document.getElementById("ai-log");
+      const t = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      el.innerHTML += `[${t}] ${msg}<br>`;
+      el.scrollTop = el.scrollHeight;
+    }
+    function showTab(n) {
+      document.querySelectorAll(".content").forEach((c, i) => { c.style.display = i === n ? "block" : "none"; });
+      document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", i === n));
+    }
+    function renderTickers() {
+      const box = document.getElementById("tickers");
+      box.innerHTML = coins.map(c => {
+        const row = priceData[c.id] || {};
+        const change = row.usd_24h_change || 0;
+        const color = change >= 0 ? "var(--green)" : "var(--red)";
+        return `<button class="coin${c.id === selected ? " on" : ""}" data-id="${c.id}" type="button">
+          <div>${c.sym}</div>
+          <div class="price">${money(row.usd)}</div>
+          <div style="color:${color}">${change >= 0 ? "+" : ""}${change.toFixed(2)}%</div>
+        </button>`;
+      }).join("");
+      box.querySelectorAll(".coin").forEach(btn => btn.addEventListener("click", () => openCoin(btn.dataset.id)));
+    }
+    async function fetchPrices() {
+      try {
+        const ids = coins.map(c => c.id).join(",");
+        const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);
+        if (!res.ok) throw new Error("CoinGecko " + res.status);
+        priceData = await res.json();
+        renderTickers();
+        document.getElementById("feed-status").textContent = "Live feed connected · refreshes every 45s";
+      } catch (err) {
+        document.getElementById("feed-status").textContent = "Feed paused: " + err.message;
+      }
+    }
+    function quote(coin) {
+      const row = priceData[coin.id] || {};
+      const change = row.usd_24h_change;
+      if (typeof row.usd !== "number") return `${coin.sym}: price not in yet.`;
+      const side = change >= 0 ? "up" : "down";
+      return `${coin.sym} is ${money(row.usd)}, ${side} ${Math.abs(change || 0).toFixed(2)}% in 24 hours. This desk reads the tape. It does not place trades.`;
+    }
+    async function openCoin(id) {
+      selected = id;
+      renderTickers();
+      showTab(2);
+      const coin = coins.find(c => c.id === id);
+      document.getElementById("chart-title").textContent = coin.sym + " · 7 DAYS";
+      document.getElementById("chart-status").textContent = "Loading " + coin.sym + "…";
+      try {
+        const res = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7`);
+        if (!res.ok) throw new Error("Chart " + res.status);
+        const data = await res.json();
+        draw(data.prices || []);
+        const last = data.prices?.[data.prices.length - 1]?.[1];
+        document.getElementById("chart-status").textContent = coin.sym + " last print " + money(last);
+      } catch (err) {
+        document.getElementById("chart-status").textContent = err.message;
+      }
+    }
+    function draw(points) {
+      const canvas = document.getElementById("chart");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width, h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, w, h);
+      if (points.length < 2) return;
+      const ys = points.map(p => p[1]);
+      const min = Math.min(...ys), max = Math.max(...ys);
+      const span = max - min || 1;
+      ctx.beginPath();
+      points.forEach((p, i) => {
+        const x = (i / (points.length - 1)) * (w - 24) + 12;
+        const y = h - 16 - ((p[1] - min) / span) * (h - 32);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      });
+      ctx.strokeStyle = "#00ff9d";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+    async function connectWallet() {
+      const info = document.getElementById("wallet-info");
+      const rows = [];
+      try {
+        if (window.solana?.connect) {
+          const sol = await window.solana.connect();
+          const key = sol.publicKey.toString();
+          const bal = await rpc("https://api.mainnet-beta.solana.com", "getBalance", [key]);
+          const solAmt = (bal.result?.value || 0) / 1e9;
+          rows.push(["SOL", solAmt.toFixed(4), key.slice(0, 4) + "…" + key.slice(-4)]);
         }
-        
-        function updateTickers() {
-            let html = "";
-            coins.forEach(c => {
-                const sym = coinSymbols[c];
-                const price = priceData[c]?.usd || "?";
-                const change = priceData[c]?.usd_24h_change || 0;
-                const changeColor = change > 0 ? "var(--green)" : "var(--red)";
-                html += `<div class="coin" onclick="showPrice('${sym}')"><div>${sym}USDT</div><div class="price" id="p-${sym}">$${typeof price === 'number' ? price.toFixed(2) : price}</div><div id="ch-${sym}" style="color:${changeColor}">${change > 0 ? '+' : ''}${change.toFixed(2)}%</div></div>`;
-            });
-            document.getElementById("tickers").innerHTML = html;
+        if (window.ethereum?.request) {
+          const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+          const addr = accounts[0];
+          const bal = await rpc("https://cloudflare-eth.com", "eth_getBalance", [addr, "latest"]);
+          const eth = Number(BigInt(bal.result || "0x0")) / 1e18;
+          rows.push(["ETH", eth.toFixed(4), addr.slice(0, 6) + "…" + addr.slice(-4)]);
         }
-        
-        function showPrice(symbol) {
-            const fullName = Object.keys(coinSymbols).find(k => coinSymbols[k] === symbol);
-            const data = priceData[fullName];
-            alert(`${symbol}: $${data?.usd || '?'}\n24h Change: ${data?.usd_24h_change?.toFixed(2) || '?'}%`);
+        if (!rows.length) {
+          info.textContent = "No Phantom or MetaMask found in this browser.";
+          return;
         }
-        
-        function updatePositions() {
-            let html = `<tr><th>Asset</th><th>Qty</th><th>PnL</th><th>Value</th></tr>`;
-            [{s:"SOL",q:"124.8",p:1840,v:"18,470"},{s:"BTC",q:"0.092",p:-320,v:"6,200"}].forEach(p => {
-                html += `<tr><td>${p.s}</td><td>${p.q}</td><td style="color:${p.p>0?'var(--green)':'var(--red)'}">$${p.p}</td><td>$${p.v}</td></tr>`;
-            });
-            document.getElementById("positions").innerHTML = html;
-        }
-        
-        function addLog(id, msg) {
-            const el = document.getElementById(id);
-            const t = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-            el.innerHTML += `[${t}] ${msg}<br>`;
-            el.scrollTop = el.scrollHeight;
-        }
-        
-        function connectWallet() {
-            walletConnected = true;
-            document.getElementById("wallet-info").innerHTML = `✅ Connected on Solana<br>Address: 9B5X...7mK2<br>Balance: ~$28,420`;
-            addLog("ai-log", "🔗 Wallet connected to Solana network");
-        }
-        
-        function executeCommand() {
-            const input = document.getElementById("cmd");
-            const cmd = input.value.trim();
-            if (!cmd) return;
-            addLog("ai-log", `> ${cmd}`);
-            if (cmd.toLowerCase().includes("ai")) switchTab(1);
-            else if (cmd.toLowerCase().includes("buy") || cmd.toLowerCase().includes("swap")) {
-                addLog("ai-log", walletConnected ? "✅ ONCHAIN EXECUTED (demo)" : "❌ Connect wallet first");
-            }
-            input.value = "";
-        }
-        
-        function switchTab(n) {
-            document.querySelectorAll('.content').forEach((c,i) => c.style.display = i===n ? 'block' : 'none');
-            document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===n));
-        }
-        
-        document.getElementById("ai-input").addEventListener("keypress", e => {
-            if (e.key === "Enter") {
-                const q = e.target.value.trim();
-                if (!q) return;
-                addLog("ai-log", `You: ${q}`);
-                e.target.value = "";
-                const lower = q.toLowerCase();
-                if (lower.includes("btc") || lower.includes("bitcoin")) {
-                    addLog("ai-log", `AI: BTC @ $${priceData.bitcoin?.usd || '?'} - Strong support at $65k. Bullish divergence forming.`);
-                } else if (lower.includes("sol") || lower.includes("solana")) {
-                    addLog("ai-log", `AI: SOL @ $${priceData.solana?.usd || '?'} - Network activity up 40%. Expect volatility.`);
-                } else if (lower.includes("eth") || lower.includes("ethereum")) {
-                    addLog("ai-log", `AI: ETH @ $${priceData.ethereum?.usd || '?'} - Staking rewards improving. Consider DCA.`);
-                } else if (lower.includes("stock")) {
-                    addLog("ai-log", "AI: Stocks: Watch Fed rates. Tech sector bullish. Check MSFT, NVDA earnings.");
-                } else {
-                    addLog("ai-log", "AI: Only crypto/stocks/digital assets supported.");
-                }
-            }
-        });
-        
-        window.onload = () => {
-            updatePositions();
-            addLog("ai-log", "🚀 Cryptovexxing.com MAX TERMINAL online");
-            fetchPrices();
-        };
-    </script>
+        wallet = rows;
+        info.textContent = "Connected. Balances are read from public chain nodes. Nothing is sent.";
+        document.getElementById("balances").innerHTML =
+          "<tr><th>Asset</th><th>Balance</th><th>Address</th></tr>" +
+          rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join("");
+        log("Wallet read: " + rows.map(r => r[0] + " " + r[1]).join(", "));
+      } catch (err) {
+        info.textContent = "Wallet refused: " + (err.message || "cancelled");
+      }
+    }
+    async function rpc(url, method, params) {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ jsonrpc: "2.0", id: 1, method, params })
+      });
+      if (!res.ok) throw new Error(method + " " + res.status);
+      return res.json();
+    }
+    function run(raw) {
+      const cmd = raw.trim();
+      if (!cmd) return;
+      log("> " + cmd);
+      const lower = cmd.toLowerCase();
+      const coin = findCoin(cmd) || coins.find(c => c.id === selected);
+      if (lower.startsWith("chart")) { openCoin(coin.id); return; }
+      if (/(buy|sell|swap|send)/.test(lower)) {
+        log("This desk does not send transactions. Read the tape, then use your own wallet.");
+        return;
+      }
+      log(quote(coin));
+      if (lower.includes("chart") || lower.includes("analyze") || lower.includes("ai")) openCoin(coin.id);
+    }
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => showTab(Number(tab.dataset.tab))));
+    document.getElementById("connect").addEventListener("click", connectWallet);
+    document.getElementById("exec").addEventListener("click", () => {
+      const input = document.getElementById("cmd");
+      run(input.value);
+      input.value = "";
+    });
+    document.getElementById("cmd").addEventListener("keydown", e => {
+      if (e.key === "Enter") { run(e.target.value); e.target.value = ""; }
+    });
+    document.getElementById("ai-input").addEventListener("keydown", e => {
+      if (e.key === "Enter") { run(e.target.value); e.target.value = ""; showTab(1); }
+    });
+    setInterval(() => {
+      document.getElementById("clock").textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    }, 1000);
+    log("Desk online. Prices are live. Trades are not sent from here.");
+    fetchPrices();
+    setInterval(fetchPrices, 45000);
+    openCoin("bitcoin");
+  </script>
 </body>
 </html>
