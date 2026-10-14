@@ -1,34 +1,16 @@
-Cryptovexxing.com
+# Cryptovexxing
 
-**The Ultimate Onchain AI Crypto Terminal**
+A browser crypto terminal. Live prices come from CoinGecko. The wallet, positions, and charts on screen are a demo, not a connected exchange.
 
-A powerful, beautiful, and mobile-first trading terminal built for speed and real onchain execution.
+Open it here: https://golddexzy-create.github.io/Cryptovexxing.com/
 
-![Terminal Preview](https://via.placeholder.com/800x400?text=Cryptovexxing+Terminal)
+## What works
 
-## Features
+- Live BTC, SOL, ETH, XRP, and DOGE prices
+- A command bar and an AI-style advisor panel
 
-- Live multi-chain price feed (Solana, Ethereum, etc.)
-- Onchain wallet connection (Phantom / MetaMask ready)
-- Built-in AI Advisor (Crypto & Stocks only)
-- Fast command terminal (`buy SOL 50`, `swap ETH→USDC`, etc.)
-- Fully responsive — works perfectly on iPhone & Android
-- Installable as a PWA (feels like a real app)
+## What does not
 
-## How to Use
-
-1. Visit: `https://yourusername.github.io/cryptovexxing`
-2. Add to Home Screen on your phone for app-like experience
-3. Use the bottom command bar or the AI Advisor tab
-
-## Tech
-
-- Pure HTML + CSS + JavaScript (single file)
-- Designed for lightning-fast performance
-- Ready for future integrations (Jupiter Swap, TradingView, CoinGecko API, etc.)
-
----
-
-**Made with 🔥 for the crypto community**
-
-[Live Demo](https://yourusername.github.io/cryptovexxing)
+- Wallet connect does not talk to Phantom or MetaMask
+- Positions are sample numbers
+- Charts are not wired up yet
