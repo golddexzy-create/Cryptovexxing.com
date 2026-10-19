@@ -1,16 +1,44 @@
 # Cryptovexxing
 
-A browser crypto terminal. Live prices come from CoinGecko. The wallet, positions, and charts on screen are a demo, not a connected exchange.
+Browser crypto terminal UI with live market prices.
 
-Open it here: https://golddexzy-create.github.io/Cryptovexxing.com/
+**Live demo:** https://golddexzy-create.github.io/Cryptovexxing.com/
 
-## What works
+## Status
 
-- Live BTC, SOL, ETH, XRP, and DOGE prices
-- A command bar and an AI-style advisor panel
+This is an early UI prototype — not a live trading product.
 
-## What does not
+| Feature | Status |
+|--------|--------|
+| Live prices (BTC, SOL, ETH, XRP, DOGE via CoinGecko) | Working |
+| Command bar + advisor-style panel | UI only |
+| Wallet connect | Demo — not connected to Phantom/MetaMask |
+| Positions | Sample data |
+| Charts | Not wired yet |
 
-- Wallet connect does not talk to Phantom or MetaMask
-- Positions are sample numbers
-- Charts are not wired up yet
+## Stack
+
+- Static HTML/CSS/JS
+- CoinGecko public price API
+- GitHub Pages hosting
+
+## Local
+
+Open `index.html` in a browser, or serve the folder with any static server.
+
+## Roadmap (honest)
+
+Next steps if this project continues:
+
+1. Real chart library wired to price history
+2. Optional read-only wallet balance view
+3. Clear separation between demo mode and any future live mode
+
+## Related
+
+- **UseCaseAgents** — practical AI agent setups for crypto: https://github.com/golddexzy-create/usecaseagents  
+  Live: https://usecaseagents-2ti5.vercel.app
+
+## Disclaimer
+
+Not financial advice. Demo only. Do not treat on-screen positions or wallet UI as real balances or executable trades.
