@@ -1,1 +1,123 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cryptovexxing · Multi-desk</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#07090c;--panel:#0f1218;--panel2:#151922;--line:#232833;--text:#e9edf2;--muted:#8b939f;--green:#3dd68c;--red:#f07178;--blue:#5b8def;--amber:#e6b450;--purple:#a78bfa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font:14px/1.45 "IBM Plex Sans",system-ui,sans-serif}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace}
+.top{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:40}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(61,214,140,.18)}
+.badge{font-size:10px;font-weight:600;color:var(--amber);border:1px solid rgba(230,180,80,.35);background:rgba(230,180,80,.08);padding:2px 7px;border-radius:999px}
+.nav{display:flex;gap:4px;overflow:auto;padding:8px 14px;border-bottom:1px solid var(--line);background:#0c0e13;position:sticky;top:45px;z-index:30}
+.nav button{border:0;background:transparent;color:var(--muted);font:inherit;font-weight:600;font-size:12px;padding:8px 12px;border-radius:8px;cursor:pointer;white-space:nowrap}
+.nav button.on{background:var(--panel2);color:var(--text)}
+.shell{max-width:1200px;margin:0 auto;padding:14px 14px 96px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.card-h h2{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+.card-b{padding:12px}
+.grid2{display:grid;gap:12px}@media(min-width:860px){.grid2{grid-template-columns:1.2fr .8fr}}
+.tickers{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}@media(min-width:560px){.tickers{grid-template-columns:repeat(5,1fr)}}
+.coin{text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px;color:inherit;cursor:pointer}
+.coin .sym{font-size:11px;color:var(--muted);font-weight:600}.coin .px{font-family:"IBM Plex Mono",monospace;font-size:14px;margin-top:2px}.coin .ch{font-family:"IBM Plex Mono",monospace;font-size:11px;margin-top:2px}
+.up{color:var(--green)}.dn{color:var(--red)}
+table{width:100%;border-collapse:collapse}th,td{padding:8px 6px;text-align:left;border-bottom:1px solid var(--line);font-size:12px}th{color:var(--muted);font-weight:500;font-size:10px;text-transform:uppercase}
+.tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 6px;border-radius:6px}
+.tag.ok{background:rgba(61,214,140,.12);color:var(--green)}.tag.warn{background:rgba(230,180,80,.12);color:var(--amber)}.tag.bad{background:rgba(240,113,120,.12);color:var(--red)}.tag.pad{background:rgba(167,139,250,.12);color:var(--purple)}.tag.live{background:rgba(91,141,239,.15);color:var(--blue)}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:inherit;font-weight:600;font-size:12px;cursor:pointer}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.green{background:rgba(61,214,140,.15);border-color:rgba(61,214,140,.35);color:var(--green)}.btn.red{background:rgba(240,113,120,.12);border-color:rgba(240,113,120,.3);color:var(--red)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.input,select{height:34px;border-radius:8px;border:1px solid var(--line);background:#0a0c10;color:var(--text);padding:0 10px;font-family:"IBM Plex Mono",monospace;font-size:12px}
+.note{color:var(--muted);font-size:12px;margin-top:8px}.score{font-family:"IBM Plex Mono",monospace;font-weight:600}
+.bar{height:6px;border-radius:99px;background:#1a1f28;overflow:hidden}.bar>i{display:block;height:100%;border-radius:99px}
+.log{height:160px;overflow:auto;background:#0a0c10;border:1px solid var(--line);border-radius:8px;padding:10px;font-family:"IBM Plex Mono",monospace;font-size:11px;color:#c5cbd3}
+.cmdbar{position:fixed;left:0;right:0;bottom:0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--bg) 65%,transparent);z-index:50}
+.cmdbox{max-width:1200px;margin:0 auto;display:flex;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:8px}
+.cmdbox input{flex:1;border:0;background:transparent;color:var(--text);font-family:"IBM Plex Mono",monospace;font-size:12px;outline:none;padding:0 8px}
+.hidden{display:none!important}
+.kpi{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}@media(min-width:600px){.kpi{grid-template-columns:repeat(4,1fr)}}
+.kpi .box{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px}
+.kpi .l{font-size:10px;color:var(--muted);text-transform:uppercase}.kpi .v{font-family:"IBM Plex Mono",monospace;font-size:16px;margin-top:4px}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand"><span class="dot"></span>Cryptovexxing <span class="badge">PAPER + LIVE FEEDS</span></div><div class="mono" id="clock" style="color:var(--muted);font-size:12px">--:--:--</div></header>
+<nav class="nav" id="nav">
+<button class="on" data-v="pulse">Pulse</button><button data-v="audit">Audit</button><button data-v="trade">Paper trade</button><button data-v="perps">Perps</button><button data-v="predict">Predictions</button><button data-v="market">Majors</button>
+</nav>
+<main class="shell">
+<section id="v-pulse"><div class="card"><div class="card-h"><h2>Launch pulse · pre-noise</h2><span class="note" style="margin:0" id="pulse-status">Loading…</span></div>
+<div class="card-b"><p class="note" style="margin:0 0 10px"><b>Pre-Noise Score</b> ranks structure before social noise. Live: SolanaForge API. Sim rows fill density. Not a GMGN/Axiom clone.</p>
+<div class="row" style="margin-bottom:10px">
+<select id="pad-filter"><option value="all">All sources</option><option>SolanaForge</option><option>pump.fun</option><option>letsbonk</option><option>LaunchLab</option><option>Raydium</option></select>
+<select id="stage-filter"><option value="all">All stages</option><option>new</option><option>bonding</option><option>migrated</option></select>
+<button class="btn" id="pulse-refresh" type="button">Refresh</button></div>
+<div style="overflow:auto"><table><thead><tr><th>Token</th><th>Source</th><th>Stage</th><th>Age</th><th>Pre-Noise</th><th>Risk</th><th></th></tr></thead><tbody id="pulse-body"></tbody></table></div></div></div></section>
+<section id="v-audit" class="hidden"><div class="grid2"><div class="card"><div class="card-h"><h2>Rug / structure audit</h2></div><div class="card-b">
+<div class="row" style="margin-bottom:10px"><input class="input" id="audit-mint" placeholder="Mint or symbol" style="flex:1;min-width:140px"><button class="btn primary" id="run-audit" type="button">Run audit</button></div>
+<div id="audit-out" class="note">Paste a mint. SolanaForge mints use live revoked flags.</div></div></div>
+<div class="card"><div class="card-h"><h2>Checklist</h2></div><div class="card-b"><table>
+<tr><td>Mint / freeze authority</td><td><span class="tag warn">verify</span></td></tr>
+<tr><td>Top-10 concentration</td><td><span class="tag warn">&lt;40%</span></td></tr>
+<tr><td>LP burned / locked</td><td><span class="tag warn">verify</span></td></tr>
+<tr><td>Dev sold / bundled</td><td><span class="tag bad">red flag</span></td></tr>
+<tr><td>Social vs holders</td><td><span class="tag ok">pre-noise</span></td></tr>
+</table></div></div></div></section>
+<section id="v-trade" class="hidden"><div class="kpi" id="paper-kpi"></div>
+<div class="card" style="margin-top:12px"><div class="card-h"><h2>Paper ticket</h2><span class="badge">NO REAL ORDERS</span></div><div class="card-b">
+<div class="row" style="margin-bottom:10px">
+<input class="input" id="t-sym" value="DEMO" style="width:90px"><input class="input" id="t-size" value="0.1" style="width:90px">
+<button class="btn green" id="t-buy" type="button">Paper buy</button><button class="btn red" id="t-sell" type="button">Paper sell</button><button class="btn" id="t-burn" type="button">Sim burn</button></div>
+<table><thead><tr><th>Time</th><th>Side</th><th>Sym</th><th>Size</th><th>Note</th></tr></thead><tbody id="t-fills"></tbody></table></div></div></section>
+<section id="v-perps" class="hidden"><div class="card"><div class="card-h"><h2>Perps (paper)</h2></div><div class="card-b">
+<div class="row" style="margin-bottom:10px">
+<select id="p-asset"><option>BTC</option><option>ETH</option><option>SOL</option></select>
+<select id="p-side"><option>long</option><option>short</option></select>
+<select id="p-lev"><option>2x</option><option>5x</option><option selected>10x</option><option>20x</option></select>
+<input class="input" id="p-size" value="100" style="width:80px"><button class="btn primary" id="p-open" type="button">Open paper</button></div>
+<table><thead><tr><th>Asset</th><th>Side</th><th>Lev</th><th>Size</th><th>Mark</th></tr></thead><tbody id="p-pos"></tbody></table></div></div></section>
+<section id="v-predict" class="hidden"><div class="card"><div class="card-h"><h2>Predictions</h2></div><div class="card-b">
+<table><thead><tr><th>Market</th><th>Implied</th><th>Note</th><th>Max loss</th></tr></thead><tbody id="pred-body"></tbody></table></div></div></section>
+<section id="v-market" class="hidden"><div class="card"><div class="card-h"><h2>Majors</h2><span id="feed-status" class="note" style="margin:0">…</span></div><div class="card-b"><div class="tickers" id="tickers"></div></div></div>
+<div class="card"><div class="card-h"><h2>Desk log</h2></div><div class="card-b"><div class="log" id="log"></div></div></div></section>
+</main>
+<div class="cmdbar"><div class="cmdbox"><input id="cmd" placeholder="price BTC · audit MINT · pulse · long SOL 5x" autocomplete="off"><button class="btn primary" id="exec" type="button">Run</button></div></div>
+<script>
+const coins=[{id:"bitcoin",sym:"BTC"},{id:"solana",sym:"SOL"},{id:"ethereum",sym:"ETH"},{id:"ripple",sym:"XRP"},{id:"dogecoin",sym:"DOGE"}];
+let priceData={},paper={cash:10,positions:{},fills:[]},perps=[],liveRows=[],forgeByMint={};
+const pads=["pump.fun","letsbonk","LaunchLab","Raydium"],stages=["new","bonding","migrated"],names=["RIFT","NOVA","GLITCH","PIXEL","VOID","KITE","ORB","FLUX","MANGO","ZEST"];
+function money(n){if(typeof n!=="number")return"—";return n.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:n<1?4:2})}
+function log(m){const el=document.getElementById("log");if(!el)return;const t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"});el.innerHTML+=`<div><span style="color:var(--muted)">${t}</span> ${m}</div>`;el.scrollTop=el.scrollHeight}
+function show(v){document.querySelectorAll("[id^=v-]").forEach(s=>s.classList.add("hidden"));document.getElementById("v-"+v).classList.remove("hidden");document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v))}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>show(b.dataset.v));
+function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)}
+function ageMinutes(iso){if(!iso)return null;return Math.max(0,Math.floor((Date.now()-new Date(iso).getTime())/60000))}
+function scoreLive(t){let score=72;const age=ageMinutes(t.createdAt)??999;if(age<60)score+=8;if(age>10080)score-=12;const r=t.revoked||{};if(r.mint)score+=8;else score-=18;if(r.freeze)score+=8;else score-=15;if(r.update)score+=4;score=Math.max(5,Math.min(98,score));const risk=score>=70?"ok":score>=45?"warn":"bad";return{sym:t.symbol||t.name||"UNK",pad:"SolanaForge",stage:"new",ageMin:age,score,risk,mint:t.mint,live:true,revoked:r}}
+async function loadLive(){try{const res=await fetch("https://solanaforge.app/api/public/tokens.json?limit=50");if(!res.ok)throw new Error("forge "+res.status);const data=await res.json();liveRows=(data.tokens||[]).map(scoreLive);forgeByMint={};liveRows.forEach(r=>{if(r.mint)forgeByMint[r.mint]=r});log("SolanaForge · "+liveRows.length+" live")}catch(e){liveRows=[];log("SolanaForge offline · "+e.message)}}
+function genSim(){const out=[];for(let i=0;i<10;i++){const sym=names[i%names.length]+(hash(String(Date.now())+i)%90+10);const pad=pads[i%pads.length],stage=stages[i%stages.length],ageMin=1+Math.floor(Math.random()*180),top10=10+Math.floor(Math.random()*70);let score=70;if(top10>45)score-=20;else if(top10>30)score-=8;if(ageMin<5)score+=8;if(ageMin>120)score-=10;score=Math.max(5,Math.min(98,score));const risk=score>=70?"ok":score>=45?"warn":"bad";out.push({sym,pad,stage,ageMin,score,risk,live:false})}return out}
+function renderPulse(){const pad=document.getElementById("pad-filter").value,stage=document.getElementById("stage-filter").value;let rows=[...liveRows,...genSim()].filter(r=>(pad==="all"||r.pad===pad)&&(stage==="all"||r.stage===stage));rows.sort((a,b)=>b.score-a.score);document.getElementById("pulse-body").innerHTML=rows.map(r=>`<tr><td class="mono"><b>${r.sym}</b>${r.live?' <span class="tag live">live</span>':''}</td><td><span class="tag pad">${r.pad}</span></td><td>${r.stage}</td><td class="mono">${r.ageMin==null?'—':r.ageMin+'m'}</td><td><div class="score">${r.score}</div><div class="bar" style="margin-top:4px;width:72px"><i style="width:${r.score}%;background:${r.risk==='ok'?'var(--green)':r.risk==='warn'?'var(--amber)':'var(--red)'}"></i></div></td><td><span class="tag ${r.risk}">${r.risk==='ok'?'cleanish':r.risk==='warn'?'mixed':'avoid'}</span></td><td><button class="btn" type="button" data-a="${r.mint||r.sym}">Audit</button></td></tr>`).join('');document.querySelectorAll('#pulse-body [data-a]').forEach(b=>b.onclick=()=>{document.getElementById('audit-mint').value=b.dataset.a;show('audit');runAudit()});document.getElementById('pulse-status').textContent=rows.filter(r=>r.live).length+' live · '+rows.length+' total'}
+document.getElementById('pulse-refresh').onclick=async()=>{await loadLive();renderPulse()};
+document.getElementById('pad-filter').onchange=renderPulse;document.getElementById('stage-filter').onchange=renderPulse;
+function runAudit(){const raw=(document.getElementById('audit-mint').value||'DEMO').trim();const known=forgeByMint[raw];let score,risk,top10,flags;if(known){score=known.score;risk=known.risk;top10='—';const r=known.revoked||{};flags=[r.mint?'mint revoked':'mint open',r.freeze?'freeze revoked':'freeze open',r.update?'update revoked':'update open'].join(' · ')}else{const h=hash(raw.toUpperCase());top10=10+(h%55);const freeze=h%3===0,lp=h%4!==0,bun=h%5===0;score=80;if(top10>40)score-=25;if(freeze)score-=20;if(!lp)score-=15;if(bun)score-=18;score=Math.max(1,Math.min(99,score));risk=score>=65?'ok':score>=40?'warn':'bad';flags=(freeze?'freeze · ':'')+(lp?'':'LP risk · ')+(bun?'bundlers':'ok')}document.getElementById('audit-out').innerHTML=`<div class="kpi" style="margin-bottom:10px"><div class="box"><div class="l">Input</div><div class="v mono" style="font-size:11px">${raw.slice(0,18)}</div></div><div class="box"><div class="l">Score</div><div class="v">${score}/100</div></div><div class="box"><div class="l">Top-10</div><div class="v">${top10}</div></div><div class="box"><div class="l">Flags</div><div class="v" style="font-size:11px">${flags}</div></div></div><span class="tag ${risk}">${risk}</span><p class="note">${known?'Live SolanaForge flags.':'Heuristic demo.'}</p>`;log('Audit → '+score)}
+document.getElementById('run-audit').onclick=runAudit;
+function renderPaper(){document.getElementById('paper-kpi').innerHTML=`<div class="box"><div class="l">Paper SOL</div><div class="v">${paper.cash.toFixed(3)}</div></div><div class="box"><div class="l">Symbols</div><div class="v">${Object.keys(paper.positions).length}</div></div><div class="box"><div class="l">Fills</div><div class="v">${paper.fills.length}</div></div><div class="box"><div class="l">Mode</div><div class="v" style="font-size:13px">Paper</div></div>`;document.getElementById('t-fills').innerHTML=paper.fills.slice(0,20).map(f=>`<tr><td class="mono">${f.t}</td><td>${f.side}</td><td class="mono">${f.sym}</td><td class="mono">${f.size}</td><td>${f.note}</td></tr>`).join('')||'<tr><td colspan=5 class="note">No fills</td></tr>'}
+function paperTrade(side){const sym=(document.getElementById('t-sym').value||'DEMO').toUpperCase();const size=Math.max(0.001,parseFloat(document.getElementById('t-size').value)||0.1);if(side==='buy'&&paper.cash<size){log('Insufficient paper cash');return}if(side==='buy'){paper.cash-=size;paper.positions[sym]=(paper.positions[sym]||0)+size}else{paper.cash+=size;paper.positions[sym]=Math.max(0,(paper.positions[sym]||0)-size)}const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});paper.fills.unshift({t,side,sym,size:size.toFixed(3),note:'paper'});renderPaper();log('Paper '+side+' '+sym)}
+document.getElementById('t-buy').onclick=()=>paperTrade('buy');document.getElementById('t-sell').onclick=()=>paperTrade('sell');
+document.getElementById('t-burn').onclick=()=>{const sym=(document.getElementById('t-sym').value||'DEMO').toUpperCase();const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});paper.fills.unshift({t,side:'burn',sym,size:'1%',note:'sim'});renderPaper();log('Sim burn '+sym)};
+document.getElementById('p-open').onclick=()=>{const asset=document.getElementById('p-asset').value,side=document.getElementById('p-side').value,lev=document.getElementById('p-lev').value,size=document.getElementById('p-size').value;const mark=priceData[{BTC:'bitcoin',ETH:'ethereum',SOL:'solana'}[asset]]?.usd;perps.unshift({asset,side,lev,size,mark});document.getElementById('p-pos').innerHTML=perps.map(p=>`<tr><td class="mono">${p.asset}</td><td>${p.side}</td><td>${p.lev}</td><td class="mono">$${p.size}</td><td class="mono">${money(p.mark)}</td></tr>`).join('');log('Paper perp '+side+' '+asset)};
+document.getElementById('pred-body').innerHTML=[['SOL > $300 by Dec','42%','Macro','$50'],['BTC ETF inflow','35%','Flows','$40'],['Team A wins (demo)','58%','Form','$25']].map(r=>`<tr><td>${r[0]}</td><td class="mono">${r[1]}</td><td>${r[2]}</td><td class="mono">${r[3]}</td></tr>`).join('');
+async function fetchPrices(){try{const ids=coins.map(c=>c.id).join(',');const res=await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd&include_24hr_change=true`);if(!res.ok)throw new Error('CG '+res.status);priceData=await res.json();document.getElementById('tickers').innerHTML=coins.map(c=>{const row=priceData[c.id]||{},ch=row.usd_24h_change||0;return `<button class="coin" type="button"><div class="sym">${c.sym}</div><div class="px">${money(row.usd)}</div><div class="ch ${ch>=0?'up':'dn'}">${ch>=0?'+':''}${Number(ch).toFixed(2)}%</div></button>`}).join('');document.getElementById('feed-status').textContent='Live · CoinGecko'}catch(e){document.getElementById('feed-status').textContent='Paused · '+e.message}}
+function run(raw){const cmd=raw.trim();if(!cmd)return;log('> '+cmd);const l=cmd.toLowerCase();if(l.includes('pulse')){show('pulse');renderPulse();return}if(l.startsWith('audit')){show('audit');document.getElementById('audit-mint').value=cmd.split(/\s+/)[1]||'DEMO';runAudit();return}if(l.includes('long')||l.includes('short')||l.includes('perp')){show('perps');return}if(l.includes('predict')||l.includes('sport')){show('predict');return}if(/(buy|sell|swap)/.test(l)&&!l.includes('paper')){log('Use Paper trade tab');show('trade');return}const c=coins.find(x=>l.includes(x.sym.toLowerCase()))||coins[0];log(c.sym+' '+money(priceData[c.id]?.usd))}
+document.getElementById('exec').onclick=()=>{const i=document.getElementById('cmd');run(i.value);i.value=''};
+document.getElementById('cmd').onkeydown=e=>{if(e.key==='Enter'){run(e.target.value);e.target.value=''}};
+setInterval(()=>{document.getElementById('clock').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})},1000);
+(async()=>{await loadLive();renderPulse();renderPaper();fetchPrices();setInterval(fetchPrices,45000);log('Multi-desk online · SolanaForge + majors · paper only')})();
+</script>
+</body>
+</html>
