@@ -1,44 +1,45 @@
 # Cryptovexxing
 
-Browser crypto terminal UI with live market prices.
+Multi-desk crypto terminal for research and paper trading.
 
-**Live demo:** https://golddexzy-create.github.io/Cryptovexxing.com/
+**Live:** https://golddexzy-create.github.io/Cryptovexxing.com/
 
-## Status
+## What it is
 
-This is an early UI prototype — not a live trading product.
+Not a clone of Axiom or GMGN. The differentiator is **Pre-Noise Score** — rank launches by structure (authorities, age, source) *before* social volume spikes.
 
-| Feature | Status |
-|--------|--------|
-| Live prices (BTC, SOL, ETH, XRP, DOGE via CoinGecko) | Working |
-| Command bar + advisor-style panel | UI only |
-| Wallet connect | Demo — not connected to Phantom/MetaMask |
-| Positions | Sample data |
-| Charts | Not wired yet |
+## Desks
+
+| Desk | Status |
+|------|--------|
+| **Pulse** | Live SolanaForge launches + simulated pad density, Pre-Noise ranked |
+| **Audit** | Structure / rug checklist; live authority flags when mint is from SolanaForge |
+| **Paper trade** | Buy / sell / sim burn — no real orders |
+| **Perps** | Leverage ticket UI — paper only |
+| **Predictions** | Event / sports board template |
+| **Majors** | Live BTC/SOL/ETH/XRP/DOGE via CoinGecko |
 
 ## Stack
 
-- Static HTML/CSS/JS
-- CoinGecko public price API
-- GitHub Pages hosting
+- Static HTML/CSS/JS on GitHub Pages
+- [SolanaForge public API](https://solanaforge.app/api) (CC-BY-4.0, attribution)
+- CoinGecko simple price API
+
+## Not included (yet)
+
+- Real Jupiter / pump.fun execution
+- Full pump.fun firehose (needs paid indexer: Helius, Solana Tracker, etc.)
+- Live Hyperliquid perps or Polymarket odds
 
 ## Local
 
-Open `index.html` in a browser, or serve the folder with any static server.
-
-## Roadmap (honest)
-
-Next steps if this project continues:
-
-1. Real chart library wired to price history
-2. Optional read-only wallet balance view
-3. Clear separation between demo mode and any future live mode
+Open `index.html` in a browser or any static server.
 
 ## Related
 
-- **UseCaseAgents** — practical AI agent setups for crypto: https://github.com/golddexzy-create/usecaseagents  
+- **UseCaseAgents:** https://github.com/golddexzy-create/usecaseagents  
   Live: https://usecaseagents-2ti5.vercel.app
 
 ## Disclaimer
 
-Not financial advice. Demo only. Do not treat on-screen positions or wallet UI as real balances or executable trades.
+Not financial advice. Paper mode does not send transactions. Live feeds can lag or fail. Verify everything on-chain yourself.
